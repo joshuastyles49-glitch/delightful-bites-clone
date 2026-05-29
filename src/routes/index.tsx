@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "@/assets/krums-logo.png";
 import donutBox from "@/assets/krums-donut-box.png";
 import indulge from "@/assets/krums-indulge.png";
@@ -9,7 +9,7 @@ import { CartProvider, useCart } from "@/lib/cart-context";
 import { CartSheet } from "@/components/CartSheet";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
-import { ShoppingBag, MapPin, Phone, Instagram, Facebook, Star, Truck, Store, Heart } from "lucide-react";
+import { ShoppingBag, MapPin, Phone, Instagram, Facebook, Star, Truck, Store, Heart, Menu as MenuIcon, X } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -33,6 +33,7 @@ function Page() {
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
       <Nav />
+      <HeaderSpacer />
       <Hero />
       <Marquee />
       <About />
@@ -47,30 +48,116 @@ function Page() {
 
 function Nav() {
   const { count, setOpen } = useCart();
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const links = ["Menu", "Order", "Reviews", "Visit"];
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
+
   return (
-    <header className="sticky top-0 z-40 glass border-b border-border/50">
-      <div className="max-w-7xl mx-auto px-5 h-20 flex items-center justify-between">
-        <a href="#top" className="flex items-center gap-2 logo-wiggle transition-transform">
-          <img src={logo} alt="Krums" className="h-14 w-auto" />
+    <header
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
+        scrolled
+          ? "glass border-b border-border/60 shadow-[0_8px_30px_-12px_rgba(60,30,20,0.15)]"
+          : "bg-transparent border-b border-transparent"
+      }`}
+    >
+      <div className={`max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between transition-all duration-500 ${scrolled ? "h-16 md:h-20" : "h-20 md:h-24"}`}>
+        <a href="#top" onClick={() => setMobileOpen(false)} className="flex items-center gap-2 logo-wiggle transition-transform shrink-0">
+          <img src={logo} alt="Krums" className={`w-auto transition-all duration-500 ${scrolled ? "h-11 md:h-12" : "h-12 md:h-14"}`} />
         </a>
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-          {["Menu", "Order", "Reviews", "Visit"].map((l) => (
-            <a key={l} href={`#${l.toLowerCase()}`} className="relative hover:text-accent transition-colors after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-full after:h-0.5 after:bg-accent after:scale-x-0 hover:after:scale-x-100 after:origin-left after:transition-transform after:duration-300">
+
+        <nav className="hidden md:flex items-center gap-10 text-base font-medium">
+          {links.map((l) => (
+            <a
+              key={l}
+              href={`#${l.toLowerCase()}`}
+              className="relative py-2 tracking-wide text-foreground/85 hover:text-foreground transition-colors after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:w-full after:h-[2px] after:bg-accent after:scale-x-0 hover:after:scale-x-100 after:origin-left after:transition-transform after:duration-300"
+            >
               {l}
             </a>
           ))}
         </nav>
-        <Button onClick={() => setOpen(true)} className="btn-glow bg-primary text-primary-foreground rounded-full gap-2 relative">
-          <ShoppingBag size={16} /> Cart
-          {count > 0 && (
-            <span className="absolute -top-1.5 -right-1.5 bg-accent text-accent-foreground text-xs h-5 w-5 rounded-full grid place-items-center font-bold animate-pulse">
-              {count}
+
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Button
+            onClick={() => setOpen(true)}
+            aria-label="Open cart"
+            className="btn-glow bg-primary text-primary-foreground rounded-full gap-2 relative h-11 md:h-12 px-4 md:px-6 text-sm md:text-base font-medium"
+          >
+            <ShoppingBag size={18} />
+            <span className="hidden sm:inline">Cart</span>
+            {count > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 bg-accent text-accent-foreground text-[11px] h-5 min-w-5 px-1 rounded-full grid place-items-center font-bold animate-pulse">
+                {count}
+              </span>
+            )}
+          </Button>
+
+          <button
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+            className="md:hidden relative h-11 w-11 grid place-items-center rounded-full border-2 border-border bg-card btn-glow"
+          >
+            <span className={`absolute transition-all duration-300 ${mobileOpen ? "opacity-0 rotate-90 scale-75" : "opacity-100 rotate-0 scale-100"}`}>
+              <MenuIcon size={20} />
             </span>
-          )}
-        </Button>
+            <span className={`absolute transition-all duration-300 ${mobileOpen ? "opacity-100 rotate-0 scale-100" : "opacity-0 -rotate-90 scale-75"}`}>
+              <X size={20} />
+            </span>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile menu panel */}
+      <div
+        className={`md:hidden overflow-hidden transition-[max-height,opacity] duration-500 ease-out ${
+          mobileOpen ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="glass border-t border-border/60 px-5 pt-3 pb-6">
+          <nav className="flex flex-col">
+            {links.map((l, i) => (
+              <a
+                key={l}
+                href={`#${l.toLowerCase()}`}
+                onClick={() => setMobileOpen(false)}
+                style={{ transitionDelay: mobileOpen ? `${i * 60}ms` : "0ms" }}
+                className={`group flex items-center justify-between py-4 text-2xl font-display border-b border-border/40 last:border-0 transition-all duration-500 ${
+                  mobileOpen ? "translate-x-0 opacity-100" : "-translate-x-3 opacity-0"
+                }`}
+              >
+                <span className="group-hover:text-accent transition-colors">{l}</span>
+                <span aria-hidden className="text-accent text-base opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">→</span>
+              </a>
+            ))}
+          </nav>
+          <a
+            href="tel:03205413898"
+            onClick={() => setMobileOpen(false)}
+            className="mt-5 flex items-center justify-center gap-2 h-12 rounded-full bg-card border-2 border-border text-base font-medium btn-glow"
+          >
+            <Phone size={16} /> 0320 5413898
+          </a>
+        </div>
       </div>
     </header>
   );
+}
+
+function HeaderSpacer() {
+  return <div className="h-20 md:h-24" aria-hidden />;
 }
 
 function Hero() {
