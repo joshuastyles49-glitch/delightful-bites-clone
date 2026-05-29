@@ -39,10 +39,12 @@ function Page() {
       <Hero />
       <Marquee />
       <About />
+      <WhyChooseUs />
       <ScrollShowcase />
       <Menu />
       <Order />
       <Reviews />
+      <FAQ />
       <Location />
       <Footer />
     </div>
