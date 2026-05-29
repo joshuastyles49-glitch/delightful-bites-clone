@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "@/assets/krums-logo.png";
 import donutBox from "@/assets/krums-donut-box.png";
 import indulge from "@/assets/krums-indulge.png";
@@ -9,7 +9,7 @@ import { CartProvider, useCart } from "@/lib/cart-context";
 import { CartSheet } from "@/components/CartSheet";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
-import { ShoppingBag, MapPin, Phone, Instagram, Facebook, Star, Truck, Store, Heart } from "lucide-react";
+import { ShoppingBag, MapPin, Phone, Instagram, Facebook, Star, Truck, Store, Heart, Menu as MenuIcon, X } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
