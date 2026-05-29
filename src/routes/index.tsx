@@ -37,12 +37,40 @@ function Page() {
       <Hero />
       <Marquee />
       <About />
+      <ScrollShowcase />
       <Menu />
       <Order />
       <Reviews />
       <Location />
       <Footer />
     </div>
+  );
+}
+
+function ScrollShowcase() {
+  return (
+    <section className="px-5 bg-secondary/30">
+      <ContainerScroll
+        titleComponent={
+          <>
+            <span className="text-sm font-medium text-accent uppercase tracking-widest">A closer look</span>
+            <h2 className="font-display text-5xl md:text-7xl mt-3 text-balance">
+              Baked with love, <em className="not-italic text-accent">served with a smile</em>.
+            </h2>
+            <p className="mt-5 text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+              Scroll through the moment — every box, every bite, made fresh in F-6.
+            </p>
+          </>
+        }
+      >
+        <img
+          src={indulge}
+          alt="Indulge the Krums way"
+          className="w-full h-full object-cover rounded-2xl"
+          draggable={false}
+        />
+      </ContainerScroll>
+    </section>
   );
 }
 
