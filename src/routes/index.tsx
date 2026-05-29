@@ -9,7 +9,8 @@ import { CartProvider, useCart } from "@/lib/cart-context";
 import { CartSheet } from "@/components/CartSheet";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
-import { ShoppingBag, MapPin, Phone, Instagram, Facebook, Star, Truck, Store, Heart, Menu as MenuIcon, X } from "lucide-react";
+import { ShoppingBag, MapPin, Phone, Instagram, Facebook, Star, Truck, Store, Heart, Menu as MenuIcon, X, Sparkles, Leaf, Clock, Award, ChevronDown } from "lucide-react";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 
 export const Route = createFileRoute("/")({
@@ -38,10 +39,12 @@ function Page() {
       <Hero />
       <Marquee />
       <About />
+      <WhyChooseUs />
       <ScrollShowcase />
       <Menu />
       <Order />
       <Reviews />
+      <FAQ />
       <Location />
       <Footer />
     </div>
@@ -420,6 +423,81 @@ function Location() {
             referrerPolicy="no-referrer-when-downgrade"
           />
         </div>
+      </div>
+    </section>
+  );
+}
+
+function WhyChooseUs() {
+  const items = [
+    { icon: Leaf, title: "Fresh Daily", text: "Baked from scratch every morning with premium, locally-sourced ingredients." },
+    { icon: Sparkles, title: "Handcrafted", text: "Every cookie hand-shaped, every skillet poured with care — no shortcuts." },
+    { icon: Clock, title: "Open Late", text: "Open till midnight for those late-night sweet cravings in F-6." },
+    { icon: Award, title: "Loved in Islamabad", text: "Hundreds of 5-star reviews from regulars who keep coming back." },
+  ];
+  return (
+    <section className="px-5 py-24 md:py-32">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <span className="text-sm font-medium text-accent uppercase tracking-widest">Why Krums</span>
+          <h2 className="font-display text-5xl md:text-7xl mt-3 text-balance">The little things, <em className="not-italic text-accent">done right</em>.</h2>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {items.map((it, i) => (
+            <div
+              key={it.title}
+              className="group relative float-hover p-7 rounded-3xl bg-card border border-border/50 shadow-sm overflow-hidden"
+              style={{ animationDelay: `${i * 80}ms` }}
+            >
+              <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-accent/20 blur-2xl group-hover:scale-150 transition-transform duration-700" />
+              <div className="relative">
+                <div className="w-14 h-14 rounded-2xl bg-accent/40 grid place-items-center group-hover:rotate-6 group-hover:scale-110 transition-transform duration-500">
+                  <it.icon size={24} />
+                </div>
+                <h3 className="font-display text-2xl mt-5">{it.title}</h3>
+                <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{it.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FAQ() {
+  const faqs = [
+    { q: "Where are you located?", a: "We're tucked inside Roomy Signature Hotel, Shop G-12, Block 07, Super Market, F-6 Markaz, Islamabad." },
+    { q: "Do you deliver?", a: "Yes! We deliver hot and fresh across Islamabad. Call 0320 5413898 or order through your cart and we'll arrange delivery." },
+    { q: "What are your timings?", a: "We're open daily from late morning till midnight — perfect for both afternoon treats and late-night cravings." },
+    { q: "Can I place a custom or bulk order?", a: "Absolutely. For birthdays, events, or office boxes, give us a call at 0320 5413898 a day in advance and we'll sort it out." },
+    { q: "Do you have eggless or dietary options?", a: "We have a few eggless items on the menu. Just ask when you call or visit — we'll guide you to the best picks." },
+    { q: "How fresh is the bake?", a: "Everything is baked fresh in-house every day. Nothing sits overnight — what you taste came out of our oven that morning." },
+  ];
+  return (
+    <section id="faq" className="px-5 py-24 md:py-32 bg-secondary/40">
+      <div className="max-w-3xl mx-auto">
+        <div className="text-center mb-14">
+          <span className="text-sm font-medium text-accent uppercase tracking-widest">FAQ</span>
+          <h2 className="font-display text-5xl md:text-6xl mt-3 text-balance">Quick <em className="not-italic text-accent">answers</em>.</h2>
+          <p className="mt-4 text-muted-foreground">Everything you wanted to know before that first bite.</p>
+        </div>
+        <Accordion type="single" collapsible className="space-y-3">
+          {faqs.map((f, i) => (
+            <AccordionItem
+              key={i}
+              value={`item-${i}`}
+              className="border border-border/60 bg-card rounded-2xl px-5 shadow-sm data-[state=open]:shadow-md transition-shadow"
+            >
+              <AccordionTrigger className="font-display text-lg md:text-xl py-5 hover:no-underline text-left">
+                {f.q}
+              </AccordionTrigger>
+              <AccordionContent className="text-muted-foreground text-base leading-relaxed pb-5">
+                {f.a}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </div>
     </section>
   );
