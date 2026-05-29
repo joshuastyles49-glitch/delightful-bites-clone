@@ -33,6 +33,7 @@ function Page() {
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
       <Nav />
+      <HeaderSpacer />
       <Hero />
       <Marquee />
       <About />
