@@ -9,7 +9,8 @@ import { CartProvider, useCart } from "@/lib/cart-context";
 import { CartSheet } from "@/components/CartSheet";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
-import { ShoppingBag, MapPin, Phone, Instagram, Facebook, Star, Truck, Store, Heart, Menu as MenuIcon, X } from "lucide-react";
+import { ShoppingBag, MapPin, Phone, Instagram, Facebook, Star, Truck, Store, Heart, Menu as MenuIcon, X, Sparkles, Leaf, Clock, Award, ChevronDown } from "lucide-react";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 
 export const Route = createFileRoute("/")({
